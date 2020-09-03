@@ -203,6 +203,22 @@
   <dependencies>
 
     <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-core</artifactId>
+      <version>1.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-lambda-java-events</artifactId>
+      <version>2.2.7</version>
+    </dependency>
+    <dependency>
+      <groupId>com.amazonaws</groupId>
+      <artifactId>aws-java-sdk-s3</artifactId>
+      <version>1.11.578</version>
+    </dependency>
+
+    <dependency>
       <groupId>com.nablarch.profile</groupId>
       <artifactId>nablarch-batch</artifactId>
     </dependency>
@@ -220,6 +236,13 @@
     <dependency>
       <groupId>com.nablarch.configuration</groupId>
       <artifactId>nablarch-testing-default-configuration</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.jmockit</groupId>
+      <artifactId>jmockit</artifactId>
+      <version>1.35</version>
       <scope>test</scope>
     </dependency>
 
@@ -311,51 +334,20 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.2</version>
         <configuration>
-          <archive>
-            <manifestEntries>
-              <Target-Environment>${env.name}</Target-Environment>
-            </manifestEntries>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <classpathPrefix>lib/</classpathPrefix>
-              <mainClass>nablarch.fw.launcher.Main</mainClass>
-            </manifest>
-          </archive>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>shade</goal>
             </goals>
-            <configuration>
-              <descriptors>
-                <descriptor>distribution.xml</descriptor>
-              </descriptors>
-              <finalName>${project.artifactId}-${project.version}</finalName>
-              <appendAssemblyId>false</appendAssemblyId>
-            </configuration>
           </execution>
         </executions>
       </plugin>
-      <!-- ================ここから任意で使用するツールの設定================ -->
-      <!-- gsp-dba-maven-pluginで自動生成したソースをビルド時に使用するための設定 -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-      </plugin>
-      <!-- カバレッジ取得 -->
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-      <!-- ================ここまで任意で使用するツールの設定================ -->
     </plugins>
   </build>
 </project>
