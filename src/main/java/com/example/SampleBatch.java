@@ -2,15 +2,21 @@ package com.example;
 
 import nablarch.common.code.CodeUtil;
 import nablarch.common.io.FileRecordWriterHolder;
+import nablarch.core.dataformat.DataRecord;
+import nablarch.core.dataformat.FileRecordReader;
 import nablarch.core.log.Logger;
 import nablarch.core.log.LoggerManager;
 import nablarch.core.message.MessageUtil;
+import nablarch.core.util.FilePathSetting;
 import nablarch.fw.ExecutionContext;
 import nablarch.fw.Result;
 import nablarch.fw.Result.Success;
 import nablarch.fw.action.NoInputDataBatchAction;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,6 +81,13 @@ public class SampleBatch extends NoInputDataBatchAction {
     private static final String CODE_VALUE = "1";
 
 
+    private FileRecordReader createFileRecordReader(String dataFileName, String layoutFileName) {
+        FilePathSetting filePathSetting = FilePathSetting.getInstance();
+        File dataFile = filePathSetting.getFile("input", dataFileName);
+        File layoutFile = filePathSetting.getFileWithoutCreate("format", layoutFileName);
+        return new FileRecordReader(dataFile, layoutFile);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -83,7 +96,16 @@ public class SampleBatch extends NoInputDataBatchAction {
 
         LOGGER.logInfo("疎通確認を開始します。");
 
+        List<DataRecord> inputRecords = new ArrayList<>();
+        try (FileRecordReader reader = createFileRecordReader("test-input.csv", LAYOUT_FILE_NAME)) {
+            while (reader.hasNext()) {
+                inputRecords.add(reader.read());
+            }
+        }
+
         FileRecordWriterHolder.open(OUTPUT_FILE_NAME, LAYOUT_FILE_NAME);
+
+        inputRecords.stream().forEach(record -> FileRecordWriterHolder.write(record, OUTPUT_FILE_NAME));
 
         // ディスパッチ機能の疎通確認
         // (このメソッドが呼ばれたということはディスパッチ機能は機能している)

@@ -85,7 +85,7 @@ target
 .project
 .classpath
 WebContent/META-INF/MANIFEST.MF
-work
+work/output
 gsp-target/
 
 ### JetBrains template
@@ -101,3 +101,7 @@ gsp-target/
 
 ## File-based project format:
 *.iws
+
+app.log
+monitor.log
+h2/db/SAMPLE.h2.db
