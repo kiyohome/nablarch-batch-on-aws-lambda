@@ -57,17 +57,16 @@ public class S3FileHandler implements Handler<Object, Object> {
 
         s3Client.getObject(getObjectRequest, file);
 
-        context.setRequestScopedVar(BUCKET_NAME_VARIABLE_NAME, bucketName);
         context.setRequestScopedVar(OBJECT_KEY_VARIABLE_NAME, objectKey);
     }
 
-    private static final String BUCKET_NAME_VARIABLE_NAME = "s3InputBucketName";
     private static final String OBJECT_KEY_VARIABLE_NAME = "s3InputObjectKey";
 
     protected void putS3(NablarchBatchOnS3EventLambda.S3EventCommandLine commandLine, ExecutionContext context) {
 
-        final String bucketName = env.computeIfAbsent("NABLARCH_S3_PUT_BUCKET_NAME",
-                key -> context.getRequestScopedVar(BUCKET_NAME_VARIABLE_NAME));
+        final String bucketName = env.computeIfAbsent("NABLARCH_S3_PUT_BUCKET_NAME", key -> {
+            throw new IllegalStateException("The NABLARCH_S3_PUT_BUCKET_NAME environment variable is required.");
+        });
         final String objectKey = env.computeIfAbsent("NABLARCH_S3_PUT_OBJECT_KEY",
                 key -> "out-" + context.getRequestScopedVar(OBJECT_KEY_VARIABLE_NAME));
 
