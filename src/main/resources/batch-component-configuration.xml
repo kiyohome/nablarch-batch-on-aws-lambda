@@ -53,6 +53,8 @@
     <!-- グローバルエラーハンドラ -->
     <component class="nablarch.fw.handler.GlobalErrorHandler" />
 
+    <component class="nablarch.common.io.FileRecordWriterDisposeHandler" />
+
     <!-- スレッドコンテキスト変数削除ハンドラ -->
     <component class="nablarch.common.handler.threadcontext.ThreadContextClearHandler" />
 

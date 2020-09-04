@@ -57,6 +57,8 @@
 
     <component-ref name="s3FileHandler" />
 
+    <component class="nablarch.common.io.FileRecordWriterDisposeHandler" />
+
     <!-- スレッドコンテキスト変数削除ハンドラ -->
     <component class="nablarch.common.handler.threadcontext.ThreadContextClearHandler" />
 
