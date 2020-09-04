@@ -56,5 +56,11 @@ S3⇔ローカルのファイル移動するための情報を指定できます
 
 Lambdaを作ります。
 
-TODO：実際にLambdaにデプロイして設定内容を書く。
+基本設定
+ランタイム：java8
+ハンドラ；nablarch.integration.amazonaws.lambda.NablarchBatchOnS3EventLambda::handleRequest
+
+環境変数
+NABLARCH_REQUEST_PATH：SampleBatch
+
 

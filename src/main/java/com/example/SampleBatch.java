@@ -116,8 +116,8 @@ public class SampleBatch extends NoInputDataBatchAction {
         writeOkRecord("message");
 
         // コード機能の疎通確認
-        checkCodeFunction();
-        writeOkRecord("code");
+//        checkCodeFunction();
+//        writeOkRecord("code");
 
         LOGGER.logInfo("疎通確認が完了しました。");
 

@@ -29,6 +29,7 @@ public class NablarchBatchOnS3EventLambdaTest {
     public void success() {
 
         NablarchBatchOnS3EventLambda sut = new NablarchBatchOnS3EventLambda(new HashMap<String, String>() {{
+            put("NABLARCH_DI_CONFIG", "classpath:batch-component-configuration.xml");
             put("NABLARCH_REQUEST_PATH", SampleBatch.class.getSimpleName());
         }});
 
