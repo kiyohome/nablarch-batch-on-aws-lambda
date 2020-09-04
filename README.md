@@ -9,6 +9,10 @@ NablarchバッチをAWS Lambdaで動かすことを試します。
 - S3FileHandlerクラスがS3⇔ローカルのファイル移動を行います。
   - 既存のFile to Fileバッチのロジックを変更せずに使いまわせるように、ハンドラの最初の方でS3FileHandlerを差し込みます。
   - ローカルのファイルパスはNablarchのファイル管理機能を使っている前提です。
+- ログはNablarchのログ出力を標準出力に出してます。標準出力に出すとCloudWatchで見れるようです。
+  
+DBを使わないように変更しているので、ローカルでのユニットテストはNablarchBatchOnS3EventLambdaTestしか通りません。
+SampleBatchのリクエスト単体テストは動かないです。
 
 次のコマンドでAWS Lambdaにデプロイするjarを作ります。
 ```
@@ -55,13 +59,19 @@ S3⇔ローカルのファイル移動するための情報を指定できます
 
 入力ファイルと出力ファイルを格納するS3のバケットを作ります。
 
-Lambdaを作ります。
+AWSコンソールでLambdaを作ります。
 
-基本設定
-ランタイム：java8
-ハンドラ；nablarch.integration.amazonaws.lambda.NablarchBatchOnS3EventLambda::handleRequest
-
-環境変数
-NABLARCH_REQUEST_PATH：SampleBatch
-
-
+- 基本設定
+  - ランタイム：java8
+  -ハンドラ；nablarch.integration.amazonaws.lambda.NablarchBatchOnS3EventLambda::handleRequest
+- 関数コード
+  - mvnコマンドで作成したjarをアップロード
+- 環境変数
+  - NABLARCH_REQUEST_PATH：SampleBatch
+  - NABLARCH_S3_PUT_BUCKET_NAME：作成した出力用のバケット名
+  - NABLARCH_INPUT_FILE_NAME：test-input.csv
+  - NABLARCH_OUTPUT_FILE_NAME：test-result.csv
+- アクセス権限
+  - Lambdaに指定したロールにAWSLambdaExecuteポリシー(S3にアクセス可)を付与
+  - 参考
+    - https://docs.aws.amazon.com/ja_jp/lambda/latest/dg/with-s3-example.html
