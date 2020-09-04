@@ -30,7 +30,15 @@ public class NablarchBatchOnS3EventLambda implements RequestHandler<S3Event, Str
 
     @Override
     public String handleRequest(S3Event s3Event, Context context) {
+
+        final StopWatch stopWatch = new StopWatch("@@@@@ Lambda running time @@@@@");
+        stopWatch.begin();
+
         final int exitCode = Main.execute(createCommandLine(s3Event));
+
+        stopWatch.finish();
+        stopWatch.log(LOGGER);
+
         return exitCode == 0 ? "SUCCESS" : "FAILURE";
     }
 

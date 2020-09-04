@@ -6,6 +6,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.event.S3EventNotification;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import nablarch.core.log.Logger;
+import nablarch.core.log.LoggerManager;
 import nablarch.core.util.FilePathSetting;
 import nablarch.fw.ExecutionContext;
 import nablarch.fw.Handler;
@@ -15,6 +17,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class S3FileHandler implements Handler<Object, Object> {
+
+    private final Logger LOGGER = LoggerManager.get(S3FileHandler.class);
 
     private final Map<String, String> env;
     private final AmazonS3 s3Client;
@@ -36,7 +40,11 @@ public class S3FileHandler implements Handler<Object, Object> {
 
         getS3(commandLine, context);
 
+        final StopWatch stopWatch = new StopWatch("@@@@@ Batch running time @@@@@");
+        stopWatch.begin();
         final Object result = context.handleNext(data);
+        stopWatch.finish();
+        stopWatch.log(LOGGER);
 
         putS3(commandLine, context);
 
@@ -44,6 +52,9 @@ public class S3FileHandler implements Handler<Object, Object> {
     }
 
     protected void getS3(NablarchBatchOnS3EventLambda.S3EventCommandLine commandLine, ExecutionContext context) {
+
+        final StopWatch stopWatch = new StopWatch("@@@@@ Get file from S3 time @@@@@");
+        stopWatch.begin();
 
         final S3Event s3Event = commandLine.getS3Event();
         final S3EventNotification.S3Entity s3Entity = s3Event.getRecords().get(0).getS3();
@@ -58,11 +69,17 @@ public class S3FileHandler implements Handler<Object, Object> {
         s3Client.getObject(getObjectRequest, file);
 
         context.setRequestScopedVar(OBJECT_KEY_VARIABLE_NAME, objectKey);
+
+        stopWatch.finish();
+        stopWatch.log(LOGGER);
     }
 
     private static final String OBJECT_KEY_VARIABLE_NAME = "s3InputObjectKey";
 
     protected void putS3(NablarchBatchOnS3EventLambda.S3EventCommandLine commandLine, ExecutionContext context) {
+
+        final StopWatch stopWatch = new StopWatch("@@@@@ Put file to S3 time @@@@@");
+        stopWatch.begin();
 
         final String bucketName = env.computeIfAbsent("NABLARCH_S3_PUT_BUCKET_NAME", key -> {
             throw new IllegalStateException("The NABLARCH_S3_PUT_BUCKET_NAME environment variable is required.");
@@ -77,5 +94,8 @@ public class S3FileHandler implements Handler<Object, Object> {
         final PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectKey, file);
 
         s3Client.putObject(putObjectRequest);
+
+        stopWatch.finish();
+        stopWatch.log(LOGGER);
     }
 }
