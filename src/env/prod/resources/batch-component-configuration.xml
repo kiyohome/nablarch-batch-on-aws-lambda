@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://tis.co.jp/nablarch/component-configuration  https://nablarch.github.io/schema/component-configuration.xsd">
 
   <!-- テーブル定義 -->
-  <import file="nablarch/schema-config.xml" />
+<!--  <import file="nablarch/schema-config.xml" />-->
 
   <!-- 精査に使用する文字集合定義 -->
   <import file="nablarch/core/validation/charset-definition.xml"/>
@@ -20,26 +20,26 @@
 
   <!-- Nablarch共通機能 -->
   <!-- コード機能 -->
-  <import file="nablarch/common/code.xml"/>
+<!--  <import file="nablarch/common/code.xml"/>-->
   <!-- 自動採番型を持たないRDBMSで、ユニバーサルDAOを使用するための設定 -->
-  <import file="nablarch/common/dao.xml" />
+<!--  <import file="nablarch/common/dao.xml" />-->
   <!-- 日付 -->
-  <import file="nablarch/core/date.xml"/>
+<!--  <import file="nablarch/core/date.xml"/>-->
 
 
   <!--
   バッチ固有の設定読み込み
   -->
   <!-- データベース設定-->
-  <import file="nablarch/batch/db-for-batch.xml" />
-  <import file="data-source.xml"/>
+<!--  <import file="nablarch/batch/db-for-batch.xml" />-->
+<!--  <import file="data-source.xml"/>-->
 
   <!-- ファイルパス設置 -->
   <import file="nablarch/batch/filepath-for-batch.xml" />
   <!-- マルチスレッド実行制御機能 -->
   <import file="nablarch/common/standalone/multi-thread.xml" />
   <!-- ループ・トランザクション制御機能 -->
-  <import file="nablarch/batch/loop-transaction.xml" />
+<!--  <import file="nablarch/batch/loop-transaction.xml" />-->
   <!-- データリード機能 -->
   <import file="nablarch/batch/batch-data-read.xml" />
   <!-- スレッドコンテキスト機能 -->
@@ -64,10 +64,10 @@
     <component-ref name="threadContextHandler" />
 
     <!-- データベース接続ハンドラ -->
-    <component-ref name="dbConnectionManagementHandler" />
+<!--    <component-ref name="dbConnectionManagementHandler" />-->
 
     <!-- トランザクションマネージャ -->
-    <component-ref name="transactionManagementHandler" />
+<!--    <component-ref name="transactionManagementHandler" />-->
 
     <!-- ディスパッチ -->
     <component class="nablarch.fw.handler.RequestPathJavaPackageMapping">
@@ -79,27 +79,27 @@
     <component-ref name="multiThreadExecutionHandler" />
 
     <!-- データベース接続ハンドラ -->
-    <component-ref name="dbConnectionManagementHandler" />
+<!--    <component-ref name="dbConnectionManagementHandler" />-->
 
     <!-- ループ・トランザクション制御ハンドラ -->
-    <component-ref name="loopHandler" />
+<!--    <component-ref name="loopHandler" />-->
 
     <!-- データリードハンドラ -->
     <component-ref name="dataReadHandler" />
   </list>
 
   <!-- 初期化が必要なコンポーネント -->
-  <component name="initializer"
+<!--  <component name="initializer"
              class="nablarch.core.repository.initialization.BasicApplicationInitializer">
     <property name="initializeList">
       <list>
-        <!-- common/date.xml:業務日付コンポーネント -->
+        &lt;!&ndash; common/date.xml:業務日付コンポーネント &ndash;&gt;
         <component-ref name="businessDateProvider" />
-        <!-- common/code.xml:コードのローダ -->
+        &lt;!&ndash; common/code.xml:コードのローダ &ndash;&gt;
         <component-ref name="codeLoader" />
-        <!-- common/code.xml:コードのキャッシュ -->
+        &lt;!&ndash; common/code.xml:コードのキャッシュ &ndash;&gt;
         <component-ref name="codeCache" />
       </list>
     </property>
-  </component>
+  </component>-->
 </component-configuration>
